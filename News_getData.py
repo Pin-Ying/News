@@ -2,6 +2,7 @@ import requests as rq
 from bs4 import BeautifulSoup
 import pandas as pd
 from datetime import datetime
+import os
 
 
 def get_soup(page):
@@ -72,9 +73,11 @@ total_pages = int(soup.find("a", title="到最後一頁").get("href").split("=")
 pageStart, pageEnd = get_pages(total_pages)
 
 print("開始擷取資料...")
+if not os.path.isdir("./TFCnews"):
+    os.mkdir("./TFCnews")
 df = get_dataframe(pageStart, pageEnd)
 df.to_csv(
-    f"TFCnews_{datetime.now().strftime("%Y-%m-%d")}_page_{pageStart}-{pageEnd}.csv",
+    f"./TFCnews/{datetime.now().strftime("%Y-%m-%d")}_page_{pageStart}-{pageEnd}.csv",
     encoding="utf-8-sig",
 )
 
